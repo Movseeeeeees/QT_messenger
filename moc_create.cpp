@@ -1,13 +1,12 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'mainwidget.h'
+** Meta object code from reading C++ file 'create.h'
 **
 ** Created by: The Qt Meta Object Compiler version 68 (Qt 6.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "mainwidget.h"
-#include <QtGui/qtextcursor.h>
+#include "create.h"
 #include <QtCore/qmetatype.h>
 
 #if __has_include(<QtCore/qtmochelpers.h>)
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 #include <memory>
 
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'mainwidget.h' doesn't include <QObject>."
+#error "The header file 'create.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
 #error "This file was generated using the moc from 6.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -37,28 +36,28 @@ QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
 
 #ifdef QT_MOC_HAS_STRINGDATA
-struct qt_meta_stringdata_CLASSMainWidgetENDCLASS_t {};
-static constexpr auto qt_meta_stringdata_CLASSMainWidgetENDCLASS = QtMocHelpers::stringData(
-    "MainWidget"
+struct qt_meta_stringdata_CLASSNewWidgetENDCLASS_t {};
+static constexpr auto qt_meta_stringdata_CLASSNewWidgetENDCLASS = QtMocHelpers::stringData(
+    "NewWidget"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
-struct qt_meta_stringdata_CLASSMainWidgetENDCLASS_t {
+struct qt_meta_stringdata_CLASSNewWidgetENDCLASS_t {
     uint offsetsAndSizes[2];
-    char stringdata0[11];
+    char stringdata0[10];
 };
 #define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_CLASSMainWidgetENDCLASS_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWidgetENDCLASS_t qt_meta_stringdata_CLASSMainWidgetENDCLASS = {
+    uint(sizeof(qt_meta_stringdata_CLASSNewWidgetENDCLASS_t::offsetsAndSizes) + ofs), len 
+Q_CONSTINIT static const qt_meta_stringdata_CLASSNewWidgetENDCLASS_t qt_meta_stringdata_CLASSNewWidgetENDCLASS = {
     {
-        QT_MOC_LITERAL(0, 10)   // "MainWidget"
+        QT_MOC_LITERAL(0, 9)   // "NewWidget"
     },
-    "MainWidget"
+    "NewWidget"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_CLASSMainWidgetENDCLASS[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSNewWidgetENDCLASS[] = {
 
  // content:
       12,       // revision
@@ -74,20 +73,20 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWidgetENDCLASS[] = {
        0        // eod
 };
 
-Q_CONSTINIT const QMetaObject MainWidget::staticMetaObject = { {
+Q_CONSTINIT const QMetaObject NewWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_CLASSMainWidgetENDCLASS.offsetsAndSizes,
-    qt_meta_data_CLASSMainWidgetENDCLASS,
+    qt_meta_stringdata_CLASSNewWidgetENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSNewWidgetENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSMainWidgetENDCLASS_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSNewWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
-        QtPrivate::TypeAndForceComplete<MainWidget, std::true_type>
+        QtPrivate::TypeAndForceComplete<NewWidget, std::true_type>
     >,
     nullptr
 } };
 
-void MainWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void NewWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     (void)_o;
     (void)_id;
@@ -95,20 +94,20 @@ void MainWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     (void)_a;
 }
 
-const QMetaObject *MainWidget::metaObject() const
+const QMetaObject *NewWidget::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *MainWidget::qt_metacast(const char *_clname)
+void *NewWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CLASSMainWidgetENDCLASS.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSNewWidgetENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
 
-int MainWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int NewWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     return _id;

@@ -1,5 +1,6 @@
 #include <QtWidgets>
 #include "mainwidget.h"
+#include "secondwidget.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
@@ -12,7 +13,7 @@ MainWidget::MainWidget(QWidget *parent) :
    label_pass = new QLabel("Password");
    line_pass->setEchoMode(QLineEdit::Password);
    label_forgot = new QLabel("Forgot password?");
-   pixmap = new QPixmap("chat.png");
+   pixmap = new QPixmap("/home/movses/QT_messenger/chat.png");
    label_png = new QLabel;
 
    QGridLayout *mainLayout = new QGridLayout;
@@ -35,8 +36,26 @@ MainWidget::MainWidget(QWidget *parent) :
    widget->setLayout(horizontalLayout);
    mainLayout->addWidget(widget,7,0);
 
+
    setLayout(mainLayout);
    setWindowTitle(tr("Messenger"));
+   connect(button_new, &QPushButton::clicked, this,&MainWidget::openSecondWidget);
+}
+
+void MainWidget::openSecondWidget()
+{
+   if (!secondWidgetOpen)
+   {
+       SecondWidget *secondWidget = new SecondWidget;
+       secondWidget->show();
+         secondWidgetOpen=true;
+
+       }
+   else
+   {
+       QMessageBox::information(this, "Info", "Second window is already open.");
+   }
+
 }
 
 MainWidget::~MainWidget()
@@ -50,5 +69,5 @@ MainWidget::~MainWidget()
    delete label_pass;
    delete label_forgot;          
    delete label_png;
-   delete pixmap;          
-        }
+   delete pixmap;
+}

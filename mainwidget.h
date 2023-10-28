@@ -1,19 +1,19 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
+
 #include <QWidget>
 #include <QLabel>
 #include <QPixmap>
 #include <QHBoxLayout>
-
-class QPushButton;
-class QLineEdit;
+#include <QPushButton>
+#include <QLineEdit>
 
 class MainWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWidget(QWidget *parent = 0); //Constructor
+    MainWidget(QWidget *parent = 0); //Constructor
     ~MainWidget(); // Destructor
 
 private:
@@ -27,6 +27,10 @@ private:
    QLabel* label_pass;
    QLabel* label_forgot;
    QPixmap* pixmap;
+   bool secondWidgetOpen;
+
+public slots:
+   void openSecondWidget();
 
 };
 
