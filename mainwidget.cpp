@@ -1,10 +1,36 @@
 #include <QtWidgets>
 #include "mainwidget.h"
 #include "secondwidget.h"
+#include <QtSql/QSql>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QString>
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
+
 {
+   /* QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("127.0.0.1");
+    db.setDatabaseName("my_database");
+    db.setUserName("hp");
+    db.setPassword("7777777");
+    db.setPort(3306);
+
+     QSqlDatabase::database().transaction();
+     QSqlQuery query(db);
+     query.prepare("INSERT INTO my_database.users (iduser,user_name,user_surname) VALUES ('14','10','10');");
+    // query.bindValue(":v1", name);
+     //query.bindValue(":v2", surname);
+      query.exec();
+        QSqlDatabase::database().commit();
+
+    if (!db.open()) {
+        qDebug() << "Error:" << db.lastError().text();
+    } else {
+        qDebug() << "Database connected!";
+*/
    button_new = new QPushButton(tr("Create new account"));
    button_login = new QPushButton(tr("Log In"));
    line_log = new QLineEdit;
@@ -42,8 +68,7 @@ MainWidget::MainWidget(QWidget *parent) :
    connect(button_new, &QPushButton::clicked, this,&MainWidget::openSecondWidget);
 }
 
-void MainWidget::openSecondWidget()
-{
+    void MainWidget::openSecondWidget(){
    if (!secondWidgetOpen)
    {
        SecondWidget *secondWidget = new SecondWidget;
@@ -58,7 +83,7 @@ void MainWidget::openSecondWidget()
 
 }
 
-MainWidget::~MainWidget()
+    MainWidget::~MainWidget()
 {
 
    delete button_new;

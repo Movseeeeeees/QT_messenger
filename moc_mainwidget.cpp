@@ -1,4 +1,4 @@
-/****************************************************************************
+***********************************************************************
 ** Meta object code from reading C++ file 'mainwidget.h'
 **
 ** Created by: The Qt Meta Object Compiler version 68 (Qt 6.6.0)
