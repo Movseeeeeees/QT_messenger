@@ -9,9 +9,19 @@
 #include <QSqlDatabase>
 #include <QCryptographicHash>
 #include <QFileDialog>
+#include <QPixmap>
+#include <QBuffer>
+#include <QFileInfo>
 
 SecondWidget::SecondWidget(QWidget *parent) : QWidget(parent)
 {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("127.0.0.1");
+    db.setDatabaseName("my_database");
+    db.setUserName("hp");
+    db.setPassword("7777777");
+    db.setPort(3306);
+
    name=new QLineEdit;
    surname=new QLineEdit;
    mail=new QLineEdit;
@@ -29,7 +39,6 @@ SecondWidget::SecondWidget(QWidget *parent) : QWidget(parent)
 
    password->setEchoMode(QLineEdit::Password);
    password_check->setEchoMode(QLineEdit::Password);
-
    QGridLayout *Lay = new QGridLayout;
 
    pixmap = new QPixmap("/home/movses/QT_messenger/registration.png");
@@ -51,38 +60,26 @@ SecondWidget::SecondWidget(QWidget *parent) : QWidget(parent)
    connect(create,SIGNAL(clicked(bool)) , this,SLOT(create_account()));
    connect(load,SIGNAL(clicked(bool)), this , SLOT(load_image()));
    }
-bool SecondWidget::insert_data(QString name, QString surname, QString mail, QString phone , QString password){
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("127.0.0.1");
-    db.setDatabaseName("my_database");
-    db.setUserName("hp");
-    db.setPassword("7777777");
-    db.setPort(3306);
+void SecondWidget::insert_data(QString name, QString surname, QString mail, QString phone , QString password,QString imagename , QByteArray fdtos){
 
     QSqlDatabase::database().transaction();
+    db.open();
     QSqlQuery query(db);
-    query.prepare("INSERT INTO my_database.users (name,surname,mail,phone,passwordh) VALUES (?,?,?,?,?);");
+    query.prepare("INSERT INTO my_database.users (name,surname,mail,phone,passwordh,imagename,imagedata) VALUES (?,?,?,?,?,?,?);");
     query.bindValue(0, name);
     query.bindValue(1, surname);
     query.bindValue(2, mail);
     query.bindValue(3, phone);
     query.bindValue(4, password);
+    query.bindValue(5, imagename);
+    query.bindValue(6, fdtos);
 
     query.exec();
+    db.close();
+
     QSqlDatabase::database().commit();
-    if (!db.open()) {
-        qDebug() << "Error:" << db.lastError().text();
-    } else {
-        qDebug() << "Database connected!";
-   }
 
-    if(query.exec()) {
-        return true; // Data inserted successfully
-    } else {
-        return false; // Data insertion failed
-    }
-
- }
+      }
 void SecondWidget::create_account(){
 
    QString name_ = name->text();
@@ -92,7 +89,7 @@ void SecondWidget::create_account(){
    QString password_ = hashing(password ->text());
 
      if(password ->text()== password_check->text()){
-            insert_data(name_,surname_,mail_,phone_,password_);
+            insert_data(name_,surname_,mail_,phone_,password_,imagename,fdtos);
            QMessageBox::information(this, "Info", "Succesfuly");
         close();
         }
@@ -110,8 +107,20 @@ QString SecondWidget::hashing(const QString &password){
 
 }
 void SecondWidget::load_image(){
+
         QString filename = QFileDialog::getOpenFileName(this,tr("Choose"),"",tr("Images(*.png *.jpg *.jpeg *.bmp *.gif)"));
+        QPixmap image(filename);
+        QBuffer bufferdata;
+        if(bufferdata.open(QIODevice::ReadWrite)){
+            image.save(&bufferdata,"JPG");
+        }
+
+        fdtos = bufferdata.buffer().toBase64();
+
+        QFileInfo fileinfo(filename);
+        imagename = fileinfo.fileName();
 }
 SecondWidget::~SecondWidget(){
+
 
 }

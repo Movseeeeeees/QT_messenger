@@ -19,8 +19,10 @@ QT += core gui sql
 
 # Input
 HEADERS += mainwidget.h \
+    chatwidget.h \
     secondwidget.h
 SOURCES += mainwidget.cpp testmain.cpp \
+    chatwidget.cpp \
     secondwidget.cpp
 
 FORMS +=

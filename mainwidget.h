@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
-
+#include <QSqlDatabase>
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -17,7 +17,6 @@ public:
     ~MainWidget(); // Destructor
 
 private:
-   
    QPushButton* button_login;
    QPushButton* button_new;
    QLineEdit* line_log;
@@ -28,10 +27,13 @@ private:
    QLabel* label_forgot;
    QPixmap* pixmap;
    bool secondWidgetOpen;
-
+   QSqlDatabase db;
 public slots:
    void openSecondWidget();
-
+   void openchatwidget();
+   void login();
+   QString hashing(const QString &password);
+   void closed();
 };
 
 #endif // MAINWIDGET_H

@@ -29,8 +29,12 @@ private:
     QPushButton* create;
     QPushButton* load;
 
+    QSqlDatabase db;
+
+    QByteArray fdtos;
+    QString imagename;
     QString hashing(const QString &password);
-    bool insert_data(QString name,QString surname,QString mail,QString phone ,QString password );
+    void insert_data(QString name,QString surname,QString mail,QString phone ,QString password ,QString imagename, QByteArray fdtos);
 
 private slots:
     void create_account();

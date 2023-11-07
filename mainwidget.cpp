@@ -1,36 +1,21 @@
 #include <QtWidgets>
 #include "mainwidget.h"
 #include "secondwidget.h"
+#include "chatwidget.h"
 #include <QtSql/QSql>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QString>
 
-MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent)
-
-{
-   /* QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+MainWidget::MainWidget(QWidget *parent) :QWidget(parent){
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("127.0.0.1");
     db.setDatabaseName("my_database");
     db.setUserName("hp");
     db.setPassword("7777777");
     db.setPort(3306);
 
-     QSqlDatabase::database().transaction();
-     QSqlQuery query(db);
-     query.prepare("INSERT INTO my_database.users (iduser,user_name,user_surname) VALUES ('14','10','10');");
-    // query.bindValue(":v1", name);
-     //query.bindValue(":v2", surname);
-      query.exec();
-        QSqlDatabase::database().commit();
-
-    if (!db.open()) {
-        qDebug() << "Error:" << db.lastError().text();
-    } else {
-        qDebug() << "Database connected!";
-*/
    button_new = new QPushButton(tr("Create new account"));
    button_login = new QPushButton(tr("Log In"));
    line_log = new QLineEdit;
@@ -66,26 +51,71 @@ MainWidget::MainWidget(QWidget *parent) :
    setLayout(mainLayout);
    setWindowTitle(tr("Messenger"));
    connect(button_new, &QPushButton::clicked, this,&MainWidget::openSecondWidget);
+   connect(button_login,SIGNAL(clicked(bool)),this,SLOT(login()));
 }
-
-    void MainWidget::openSecondWidget(){
+void MainWidget::closed(){
+   secondWidgetOpen=false;
+}
+void MainWidget::openSecondWidget(){
    if (!secondWidgetOpen)
    {
        SecondWidget *secondWidget = new SecondWidget;
        secondWidget->show();
-         secondWidgetOpen=true;
-
+       secondWidgetOpen=true;
        }
    else
    {
-       QMessageBox::information(this, "Info", "Second window is already open.");
+
+               QMessageBox::information(this, "Info", "Second window is already open.");
    }
+    }
+void MainWidget::openchatwidget(){
+   chatwidget *chat=new chatwidget;
+   chat->resize(400,400);
+   chat->show();
+}
+void MainWidget::login(){
+        if(line_log->text().isEmpty() or line_pass->text().isEmpty()){
+                  QMessageBox::information(this, "Info", "wrong");
+        }
+        else{
+
+                  QString username = line_log->text();
+                  QString password = hashing(line_pass->text());
+
+                  QSqlDatabase::database().transaction();
+                  db.open();
+                  QSqlQuery query(db);
+
+                  query.prepare("SELECT * FROM my_database.users WHERE mail = :username AND passwordh = :password");
+                  query.bindValue(":username", username);
+                  query.bindValue(":password", password);
+                  query.exec();
+
+                  if(query.next()) {
+                      qDebug() << "Login successful";
+                      QMessageBox::information(this, "Info", "Succesfuly");
+                      openchatwidget();
+                  } else {
+                      QMessageBox::information(this, "Info", "Login failed. Incorrect username or password.");
+                      qDebug() << "Login failed. Incorrect username or password.";
+                      qDebug() << "Error details: " << query.lastError();
+                  }
+                 db.close();
+                  QSqlDatabase::database().commit();
+            }
+    }
+QString MainWidget::hashing(const QString &password){
+
+        QByteArray passwordBytes = password.toUtf8();
+        QByteArray hashBytes = QCryptographicHash::hash(passwordBytes, QCryptographicHash::Sha256);
+
+
+        return QString(hashBytes.toHex());
 
 }
-
-    MainWidget::~MainWidget()
+MainWidget::~MainWidget()
 {
-
    delete button_new;
    delete button_login;
    delete line_log;
