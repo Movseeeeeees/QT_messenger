@@ -28,6 +28,7 @@ private:
     QLabel* label_png;
     QPushButton* create;
     QPushButton* load;
+    QPushButton* login_page;
 
     QSqlDatabase db;
 
@@ -35,10 +36,11 @@ private:
     QString imagename;
     QString hashing(const QString &password);
     void insert_data(QString name,QString surname,QString mail,QString phone ,QString password ,QString imagename, QByteArray fdtos);
-
+    bool check_data();
 private slots:
     void create_account();
     void load_image();
+    void openmainwidget();
 };
 
 

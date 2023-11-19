@@ -8,6 +8,11 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QSqlDatabase>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QTextEdit>
+#include <QMap>
+#include "secondwidget.h"
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -15,25 +20,33 @@ class MainWidget : public QWidget
 public:
     MainWidget(QWidget *parent = 0); //Constructor
     ~MainWidget(); // Destructor
-
 private:
+    //main
+   QWidget* main;
    QPushButton* button_login;
    QPushButton* button_new;
    QLineEdit* line_log;
    QLineEdit* line_pass;
-   QLabel* label_png;
+   QLabel* label_png_m;
    QLabel* label_log;
    QLabel* label_pass;
-   QLabel* label_forgot;
-   QPixmap* pixmap;
+   //QLabel* label_forgot;
+   QPixmap* pixmap_m;
    bool secondWidgetOpen;
    QSqlDatabase db;
+   SecondWidget *secondWidget;
+
 public slots:
+    void login();
+  // void closed();
+   void active(const QString &mail);
+   void notactive();
    void openSecondWidget();
    void openchatwidget();
-   void login();
+   void openmainwidget();
+
+  //void checkonlineusers();
    QString hashing(const QString &password);
-   void closed();
 };
 
 #endif // MAINWIDGET_H

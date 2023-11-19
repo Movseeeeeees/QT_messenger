@@ -30,6 +30,8 @@ SecondWidget::SecondWidget(QWidget *parent) : QWidget(parent)
    password_check=new QLineEdit;
    create=new QPushButton(tr("Create new account"));
    load = new QPushButton(tr("Load image"));
+   login_page= new QPushButton(tr("Back to login page"));
+
    name->setPlaceholderText("Name");
    surname->setPlaceholderText("Surname");
    mail->setPlaceholderText("Mail");
@@ -52,20 +54,28 @@ SecondWidget::SecondWidget(QWidget *parent) : QWidget(parent)
    Lay->addWidget(phone,5,0);
    Lay->addWidget(create,9 ,0);
    Lay->addWidget(load,8,0);
+   Lay->addWidget(login_page,10,0);
    Lay->addWidget(password,6,0);
    Lay->addWidget(password_check,7,0);
    setLayout(Lay);
    setWindowTitle(tr("Create account "));
 
+   connect(login_page,SIGNAL(clicked(bool)),this,SLOT(openmainwidget()));
    connect(create,SIGNAL(clicked(bool)) , this,SLOT(create_account()));
    connect(load,SIGNAL(clicked(bool)), this , SLOT(load_image()));
+   connect(login_page,SIGNAL(clicked(bool)),this,SLOT(openmainwidget()));
    }
 void SecondWidget::insert_data(QString name, QString surname, QString mail, QString phone , QString password,QString imagename , QByteArray fdtos){
 
+
+
+
+
+   bool activ=false;
     QSqlDatabase::database().transaction();
     db.open();
     QSqlQuery query(db);
-    query.prepare("INSERT INTO my_database.users (name,surname,mail,phone,passwordh,imagename,imagedata) VALUES (?,?,?,?,?,?,?);");
+    query.prepare("INSERT INTO my_database.users (name,surname,mail,phone,passwordh,imagename,imagedata,active) VALUES (?,?,?,?,?,?,?,?);");
     query.bindValue(0, name);
     query.bindValue(1, surname);
     query.bindValue(2, mail);
@@ -73,7 +83,7 @@ void SecondWidget::insert_data(QString name, QString surname, QString mail, QStr
     query.bindValue(4, password);
     query.bindValue(5, imagename);
     query.bindValue(6, fdtos);
-
+    query.bindValue(7, activ);
     query.exec();
     db.close();
 
@@ -87,15 +97,63 @@ void SecondWidget::create_account(){
    QString mail_ = mail->text();
    QString phone_ = phone->text();
    QString password_ = hashing(password ->text());
-
-     if(password ->text()== password_check->text()){
+   //check_data();
+     if(check_data()){
             insert_data(name_,surname_,mail_,phone_,password_,imagename,fdtos);
            QMessageBox::information(this, "Info", "Succesfuly");
         close();
         }
-        else {
-            QMessageBox::information(this, "Info", "Not same passwords");
+
+}
+bool SecondWidget::check_data(){
+
+        if(name->text().size()<=2){
+            QMessageBox::information(this, "info", "The length of the name must be more than 2 letters");
+            return false;
         }
+        if(surname->text().size()<=2){
+            QMessageBox::information(this, "info", "The length of the surname must be more than 2 letters");
+            return false;
+       }
+        if(mail->text().size()<=8){
+            QMessageBox::information(this, "info", "The length of the mail must be more than 8 letters");
+            return false;
+       }
+        if(phone->text().size()<=8){
+            QMessageBox::information(this, "info", "The length of the phone must be more than 8 letters");
+            return false;
+       }
+        if(password->text().size()<8){
+            QMessageBox::information(this, "info", "The length of the password must be more than 7 letters");
+            return false;
+       }
+        if(password ->text()!= password_check->text()){
+            QMessageBox::information(this, "info", "Passwords are not same");
+            return false;
+       }
+
+      QSqlDatabase::database().transaction();
+       db.open();
+
+       QString email=mail->text();
+       QString queryStr = "SELECT * FROM my_database.users WHERE mail = :email";
+
+       QSqlQuery query(db);
+       query.prepare(queryStr);
+       query.bindValue(":email", email);
+       query.exec();
+
+       if (query.next()) {
+            qDebug() << "Email exists in the database";
+            QMessageBox::information(this, "info", "Wrong email");
+            return false;
+       } else {
+            qDebug() << "Email does not exist in the database";
+       }
+
+       db.close();
+
+            return true;
 }
 QString SecondWidget::hashing(const QString &password){
 
@@ -120,7 +178,10 @@ void SecondWidget::load_image(){
         QFileInfo fileinfo(filename);
         imagename = fileinfo.fileName();
 }
-SecondWidget::~SecondWidget(){
+void SecondWidget::openmainwidget(){
+        this->hide();
 
+}
+SecondWidget::~SecondWidget(){
 
 }
