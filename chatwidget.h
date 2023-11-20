@@ -11,6 +11,7 @@
 #include <QComboBox>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QThread>
 
 
 class chatwidget : public QWidget {
@@ -35,6 +36,7 @@ private:
     QVBoxLayout *group_lay_communicate;
     QVBoxLayout *group_lay_active;
     QVBoxLayout *all;
+
  struct onlineuserinfo{
         QString name;
         QString surname;

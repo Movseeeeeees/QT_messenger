@@ -30,6 +30,7 @@ MainWidget::MainWidget(QWidget *parent) :QWidget(parent){
  //  main->setWindowIcon(QIcon("/home/movses/QT_messenger/chat.png"));
    button_new = new QPushButton(tr("Create new account"));
    button_login = new QPushButton(tr("Log In"));
+   button_login->setDefault(true);
    line_log = new QLineEdit;
    line_pass = new QLineEdit;
    label_log = new QLabel("Login");

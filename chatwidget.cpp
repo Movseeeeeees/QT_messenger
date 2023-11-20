@@ -11,12 +11,15 @@
 #include <QSqlError>
 #include <QLabel>
 #include <QDateTime>
+#include <QThread>
+#include <QTimer>
 
 chatwidget::chatwidget(const QString &user, QWidget *parent):QWidget(parent){
 
     setuser(user);
 
     database_init();
+
 
     checkonlineusers();
 
@@ -72,13 +75,24 @@ void chatwidget::design(){
 }
 void chatwidget::connects(){
     connect(logout,SIGNAL(clicked(bool)),this,SLOT(notactive()));
-    connect(list_users,SIGNAL(currentIndexChanged(int)),this,SLOT(connectwithuser()));
+    connect(list_users,SIGNAL(activated(int)),this,SLOT(connectwithuser()));
     connect(send,SIGNAL(clicked(bool)),this,SLOT(sendmessage()));
+
+    QTimer *timer = new QTimer(this);
+
+    connect(timer,SIGNAL(timeout()),this,SLOT(update_list_messages()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(checkonlineusers()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(showactiveusers()));
+
+    timer->start(2000);
+
 }
 void chatwidget::connectwithuser(){
-   all->addWidget(communicate);
-   to_mail=list_users->currentText();
-   update_list_messages();
+    all->addWidget(communicate);
+    to_mail=list_users->currentText();
+
+    update_list_messages();
+
 }
 void chatwidget::checkonlineusers(){
         QSqlDatabase::database().transaction();
@@ -99,7 +113,8 @@ void chatwidget::checkonlineusers(){
                       if(mail!=this->mail){
                       map_active_users.insert(mail,onlineuserinfo(name,surname,mail,phone));
                       qDebug() << "Online user: " << mail;
-                      qDebug()<<"map_size"<<map_active_users.size();}
+                      qDebug()<<"map_size"<<map_active_users.size();
+                      }
             }
             }
          else {
@@ -107,6 +122,7 @@ void chatwidget::checkonlineusers(){
         }
 
         db.close();
+        //showactiveusers();
 }
 void chatwidget::notactive(){
 
@@ -132,12 +148,14 @@ void chatwidget::notactive(){
 }
 void chatwidget::showactiveusers(){
         QMapIterator<QString,onlineuserinfo> i(map_active_users);
+        list_users->clear();
         list_users->addItem("");
         while(i.hasNext()){
                   i.next();
                   QString labelText = i.key();
                  list_users->addItem(labelText);
         }
+        list_users->setCurrentText(to_mail);
 
 }
 void chatwidget::setuser(const QString &user){
@@ -147,6 +165,8 @@ void chatwidget::sendmessage(){
     if(!message->text().isEmpty() and to_mail != ""){
     QString textuser=QString("%1 : %2 \n").arg(mail).arg(message->text());
     text->insertPlainText(textuser);
+
+    text->moveCursor(QTextCursor::End);
 
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString datetime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
@@ -169,22 +189,30 @@ void chatwidget::sendmessage(){
     }
 }
 void chatwidget::update_list_messages(){
+   if(to_mail != ""){
+
+    //QString textuser=QString("%1 : %2 \n").arg(mail).arg(message->text());
+    //text->insertPlainText(textuser);
+
     text->clear();
     QSqlDatabase::database().transaction();
     db.open();
     QSqlQuery query;
-    query.prepare("SELECT * FROM my_database.messages WHERE user1=:mail and user2=:to_mail");
+    query.prepare("SELECT * FROM my_database.messages WHERE (user1=:mail or user1=:to_mail) and (user2=:to_mail or user2=:mail)");
     query.bindValue(":mail",mail);
     query.bindValue(":to_mail",to_mail);
     if (query.exec()) {
             while (query.next()) {
+                      QString user = query.value("user1").toString();
                       QString message = query.value("message").toString();
-                      qDebug() << "Message: " << message;
+                      QString textuser = QString("%1 : %2 \n").arg(user).arg(message);
+                      text->insertPlainText(textuser);
             }
+            text->moveCursor(QTextCursor::End);
     } else {
             qDebug() << "Error executing query: " << query.lastError().text();
     }
     db.close();
     QSqlDatabase::database().commit();
-
+   }
 }

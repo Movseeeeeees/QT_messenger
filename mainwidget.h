@@ -13,6 +13,9 @@
 #include <QTextEdit>
 #include <QMap>
 #include "secondwidget.h"
+#include <QEvent>
+#include <QKeyEvent>
+
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -35,7 +38,7 @@ private:
    bool secondWidgetOpen;
    QSqlDatabase db;
    SecondWidget *secondWidget;
-
+protected:
 public slots:
     void login();
   // void closed();
