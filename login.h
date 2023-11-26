@@ -1,5 +1,5 @@
-#ifndef MAINWIDGET_H
-#define MAINWIDGET_H
+#ifndef LOGIN_H
+#define LOGIN_H
 
 #include <QWidget>
 #include <QLabel>
@@ -12,7 +12,7 @@
 #include <QGroupBox>
 #include <QTextEdit>
 #include <QMap>
-#include "secondwidget.h"
+#include "registration.h"
 #include <QEvent>
 #include <QKeyEvent>
 
@@ -52,4 +52,4 @@ public slots:
    QString hashing(const QString &password);
 };
 
-#endif // MAINWIDGET_H
+#endif // LOGIN_H

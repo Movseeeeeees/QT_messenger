@@ -1,5 +1,5 @@
-#ifndef SECONDWIDGET_H
-#define SECONDWIDGET_H
+#ifndef REGISTRATION_H
+#define REGISTRATION_H
 
 #include <QWidget>
 #include <QPushButton>
@@ -44,4 +44,4 @@ private slots:
 };
 
 
-#endif // SECONDWIDGET_H
+#endif // REGISTRATION_H

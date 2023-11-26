@@ -1,4 +1,4 @@
-#include "secondwidget.h"
+#include "registration.h"
 #include <QWidget>
 #include <QLabel>
 #include <QMessageBox>
@@ -84,7 +84,20 @@ void SecondWidget::insert_data(QString name, QString surname, QString mail, QStr
     query.bindValue(5, imagename);
     query.bindValue(6, fdtos);
     query.bindValue(7, activ);
-    query.exec();
+    //query.exec();
+
+    if (!query.exec()) {
+        qDebug() << "Created"<<db.lastError().text();
+        db.rollback();
+       }
+
+       // Check if the query was successful
+       if (query.numRowsAffected() > 0) {
+            qDebug() << "User created successfully";
+       } else {
+            qDebug() << "Failed to create user";
+       }
+
     db.close();
 
     QSqlDatabase::database().commit();

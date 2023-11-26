@@ -6,9 +6,11 @@ TEMPLATE = app
 TARGET = qtproject
 INCLUDEPATH += .
 
+
 QT += gui widgets
 
 QT += core gui sql
+
 
 # You can make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -18,13 +20,19 @@ QT += core gui sql
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-HEADERS += mainwidget.h \
+HEADERS += \
            chatwidget.h \
-    secondwidget.h
-SOURCES += mainwidget.cpp testmain.cpp \
+    login.h \
+    registration.h
+SOURCES += \
     chatwidget.cpp \
-    secondwidget.cpp
+    login.cpp \
+    main.cpp \
+    registration.cpp
 
 FORMS +=
 
 DISTFILES +=
+
+RESOURCES += \
+    sound.qrc

@@ -1,5 +1,5 @@
 #include <QtWidgets>
-#include "mainwidget.h"
+#include "login.h"
 #include "chatwidget.h"
 #include <QtSql/QSql>
 #include <QSqlDatabase>
@@ -170,8 +170,8 @@ void MainWidget::openSecondWidget(){
         }*/
 }
 void MainWidget::openchatwidget(){
-                  chatwidget *chat=new chatwidget(line_log->text(),nullptr);
-        chat->resize(400,400);
+        chatwidget *chat=new chatwidget(line_log->text(),nullptr);
+        chat->resize(600,700);
         chat->show();
 }
 void MainWidget::openmainwidget(){
